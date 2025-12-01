@@ -24,7 +24,7 @@ def build_forecast_agent() -> LlmAgent:
     For now it only uses its own reasoning.
     """
     agent = LlmAgent(
-        model="gemini-2.5-pro",
+        model="gemini-2.0-flash",
         name="forecast_agent",
         description="Forecasts hospital patient surges based on events like festivals, pollution spikes, or epidemics.",
         instruction=f"""
@@ -52,7 +52,7 @@ before forming surge predictions. Use PM2.5 and AQI values to adjust
 risk levels. If the tool returns an error, continue without pollution data.
 
 """.strip(),
-        tools=[HospitalAdmissionsTool,
-        PollutionForecastTool]
+        tools=[HospitalAdmissionsTool(),
+        PollutionForecastTool()]
     )
     return agent

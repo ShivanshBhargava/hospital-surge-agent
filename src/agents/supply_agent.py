@@ -20,7 +20,7 @@ def build_supply_agent() -> LlmAgent:
     Agent that recommends supply orders based on surge forecast.
     """
     agent = LlmAgent(
-        model="gemini-2.5-flash",
+        model="gemini-2.0-flash",
         name="supply_agent",
         description="Plans medical supplies and consumables for forecasted surges.",
         instruction=f"""
@@ -48,6 +48,6 @@ ALWAYS respond in valid JSON following this schema:
 Call inventory_tool to get current stock levels and compute recommended orders.
 
 """.strip(),
-        tools=[InventoryTool],
+        tools=[InventoryTool()],
     )
     return agent

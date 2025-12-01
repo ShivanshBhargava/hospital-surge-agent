@@ -1,16 +1,18 @@
 # src/tools/roster_tool.py
+from __future__ import annotations
 import csv
 from google.adk.tools import FunctionTool
-from typing import Dict
+
+def staff_roster_func() -> dict[str, int]:
+    """Returns current baseline staffing counts (doctors/nurses/support)."""
+    result = {}
+    with open("data/roster.csv") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            result[row["role"]] = int(row["baseline_count"])
+    return result
 
 class StaffRosterTool(FunctionTool):
-    name = "staff_roster_tool"
-    description = "Returns current baseline staffing counts (doctors/nurses/support)."
-
-    def __call__(self) -> Dict[str, int]:
-        result = {}
-        with open("data/roster.csv") as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                result[row["role"]] = int(row["baseline_count"])
-        return result
+    """Returns current baseline staffing counts (doctors/nurses/support)."""
+    def __init__(self):
+        super().__init__(func=staff_roster_func)

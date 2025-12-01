@@ -22,7 +22,7 @@ def build_staffing_agent() -> LlmAgent:
     into a concrete staffing plan.
     """
     agent = LlmAgent(
-        model="gemini-2.5-flash",
+        model="gemini-2.0-flash",
         name="staffing_agent",
         description="Plans staffing adjustments based on surge forecast.",
         instruction=f"""
@@ -48,6 +48,6 @@ Always call staff_roster_tool before computing the staffing plan so that
 your output is based on real baseline staffing numbers.
 
 """.strip(),
-        tools=[StaffRosterTool],
+        tools=[StaffRosterTool()],
     )
     return agent

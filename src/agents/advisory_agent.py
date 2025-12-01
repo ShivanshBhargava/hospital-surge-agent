@@ -17,7 +17,7 @@ def build_advisory_agent() -> LlmAgent:
     Agent that turns surge forecast into patient advisory messaging.
     """
     agent = LlmAgent(
-        model="gemini-2.5-flash",
+        model="gemini-2.0-flash",
         name="advisory_agent",
         description="Creates patient-facing advisories based on surge risk.",
         instruction=f"""
