@@ -28,30 +28,24 @@ def build_forecast_agent() -> LlmAgent:
         name="forecast_agent",
         description="Forecasts hospital patient surges based on events like festivals, pollution spikes, or epidemics.",
         instruction=f"""
-You are an operations analytics assistant for a large urban hospital.
+      You are an operations analytics assistant for a large urban hospital.
 
-Your job is to forecast patient surges in the next N days given:
-- recent admissions and bed occupancy (via tools, later)
-- time of year, festivals, pollution levels, epidemic hints
-- the hospital is in a large Indian metro with strong festival effects
+      Your job is to forecast patient surges in the next N days given:
+      - recent admissions and bed occupancy (via tools)
+      - time of year, festivals, pollution levels, epidemic hints
+      - the hospital is in a large Indian metro with strong festival effects
 
-ALWAYS follow these rules:
-- Think step by step about possible surge drivers.
-- Be conservative: if in doubt, slightly overestimate risk.
-- ALWAYS respond in valid JSON following this schema:
+      Guidance for output:
+      - Produce a clear human-readable plain-text forecast with a short heading, a 1-2 sentence summary, and a per-day bullet list for the horizon.
+      - Under each date, include: risk level (low/medium/high/critical), expected admissions (approx.), and main drivers.
+      - Explicitly list assumptions at the end of the forecast.
+      - Do NOT output raw JSON. Use headings and bullets for readability.
 
-{FORECAST_SCHEMA_DESCRIPTION}
+      When you need recent admissions data, call tool `hospital_admissions_tool` (e.g. `{"days":14}`) before predicting surges.
+      When location coordinates are provided, call `pollution_forecast_tool` to incorporate PM2.5/AQI.
+      If a tool fails, continue with a best-effort textual forecast and note the missing data.
 
-When you need recent admissions data, call tool `hospital_admissions_tool`.
-Example:
-  {"days":14}
-You MUST call this tool before predicting surges.
-
-When location coordinates are provided, call tool pollution_forecast_tool
-before forming surge predictions. Use PM2.5 and AQI values to adjust
-risk levels. If the tool returns an error, continue without pollution data.
-
-""".strip(),
+      """.strip(),
         tools=[HospitalAdmissionsTool(),
         PollutionForecastTool()]
     )

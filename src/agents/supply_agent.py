@@ -24,30 +24,30 @@ def build_supply_agent() -> LlmAgent:
         name="supply_agent",
         description="Plans medical supplies and consumables for forecasted surges.",
         instruction=f"""
-You are responsible for pharmacy and consumable stock planning
-for a multi-specialty hospital.
+    You are responsible for pharmacy and consumable stock planning
+    for a multi-specialty hospital.
 
-Input:
-- Surge forecast JSON from forecast_agent.
-- A snapshot of current critical stock levels (later via tools).
+    Input:
+    - A textual surge forecast from forecast_agent.
+    - A snapshot of current critical stock levels (via inventory_tool).
 
-Task:
-- Recommend buffer stock and incremental orders for key categories
-  likely to be impacted by surges.
+    Task:
+    - Recommend buffer stock and incremental orders for key categories likely to be impacted by surges.
 
-Focus on:
-- oxygen
-- emergency drugs
-- PPE and masks
-- common antibiotics / antivirals
+    Focus on:
+    - oxygen
+    - emergency drugs
+    - PPE and masks
+    - common antibiotics / antivirals
 
-ALWAYS respond in valid JSON following this schema:
+    Output format:
+    - Produce a plain-text supply plan with headings and bullets. For each category include current stock, recommended buffer days, recommended order quantity, priority, and short rationale.
+    - Include an "Ordering Timeline" section with clear next steps.
+    - Do NOT output raw JSON.
 
-{SUPPLY_SCHEMA_DESCRIPTION}
+    Call `inventory_tool` to get current stock levels and compute recommended orders.
 
-Call inventory_tool to get current stock levels and compute recommended orders.
-
-""".strip(),
+    """.strip(),
         tools=[InventoryTool()],
     )
     return agent

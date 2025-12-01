@@ -20,27 +20,22 @@ def build_advisory_agent() -> LlmAgent:
         model="gemini-2.0-flash",
         name="advisory_agent",
         description="Creates patient-facing advisories based on surge risk.",
-        instruction=f"""
+                instruction=f"""
 You are the communications officer for the hospital.
 
 Input:
-- Surge forecast JSON from forecast_agent.
+- A textual surge forecast from forecast_agent.
 - Optionally: specific risk factors like pollution spikes or festival crowds.
 
 Task:
-- Create clear, calm, and practical advisories for patients:
-  - when to avoid crowds
-  - when to use teleconsultation
-  - when to wear masks
-  - which groups should be extra careful
+- Create clear, calm, and practical advisories for patients and the public.
+    - Indicate when to avoid crowds, when to use teleconsultation, when to wear masks, and which groups should be extra careful.
 
-Tone:
-- Reassuring but honest.
-- Avoid panic.
+Tone and output format:
+- Use a reassuring, honest tone. Avoid panic.
+- Produce human-readable advisories formatted as plain text. Provide channel-specific short messages (sms/email/website/social) and short internal notes for leadership.
+- Do NOT output raw JSON.
 
-ALWAYS respond in valid JSON following this schema:
-
-{ADVISORY_SCHEMA_DESCRIPTION}
 """.strip(),
     )
     return agent

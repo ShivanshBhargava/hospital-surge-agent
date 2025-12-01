@@ -34,29 +34,29 @@ The Hospital Surge Agent helps large urban hospitals proactively manage unpredic
 ### Agents
 
 1. **Orchestrator Agent** - Coordinates the entire workflow
-   - Model: `gemini-2.0-flash`
-   - Role: Receives requests, delegates to specialists, synthesizes outputs
-   - Output: JSON with all four specialist outputs + leadership summary
+  - Model: `gemini-2.0-flash`
+  - Role: Receives requests, delegates to specialists, synthesizes outputs
+  - Output: A single plain-text report combining all specialist outputs with an executive summary
 
 2. **Forecast Agent** - Predicts patient surges
-   - Model: `gemini-2.0-flash`
-   - Tools: Hospital admissions data, pollution API
-   - Output: Daily surge risk levels, expected admissions, main drivers
+  - Model: `gemini-2.0-flash`
+  - Tools: Hospital admissions data, pollution API
+  - Output: Human-readable plain-text forecast (heading, short summary, per-day bullets)
 
 3. **Staffing Agent** - Plans workforce adjustments
-   - Model: `gemini-2.0-flash`
-   - Tools: Staff roster data
-   - Output: Per-day staffing recommendations, escalation plans
+  - Model: `gemini-2.0-flash`
+  - Tools: Staff roster data
+  - Output: Plain-text per-day staffing recommendations and escalation plans
 
 4. **Supply Agent** - Recommends inventory orders
-   - Model: `gemini-2.0-flash`
-   - Tools: Current inventory levels
-   - Output: Buffer stock recommendations, ordering timeline
+  - Model: `gemini-2.0-flash`
+  - Tools: Current inventory levels
+  - Output: Plain-text supply plan with per-category recommendations and timeline
 
 5. **Advisory Agent** - Creates patient communications
-   - Model: `gemini-2.0-flash`
-   - Role: Generates SMS, email, and social media advisories
-   - Output: Risk summaries and channel-specific messages
+  - Model: `gemini-2.0-flash`
+  - Role: Generates SMS, email, and social media advisories
+  - Output: Plain-text channel-specific advisories and internal notes
 
 ## Features
 
@@ -72,10 +72,10 @@ The Hospital Surge Agent helps large urban hospitals proactively manage unpredic
 - Agents use historical context to avoid repeating past mistakes
 
 ### Output Formats
-All agents produce structured JSON outputs with:
-- Assumptions and risk assessments
-- Detailed per-day or per-category plans
-- Action timelines and escalation procedures
+All agents produce structured plain-text outputs with:
+- Assumptions and risk assessments (clearly listed)
+- Detailed per-day or per-category plans formatted as bullets
+- Action timelines and escalation procedures in readable text
 
 ## Setup
 
@@ -221,58 +221,39 @@ Stores past surge events:
 
 When you request: *"Plan for the next 7 days — expected Diwali crowds"*
 
-The orchestrator produces JSON with:
+The orchestrator produces a single plain-text report. Example:
 
-```json
-{
-  "surge_forecast": {
-    "horizon_days": 7,
-    "daily_forecast": [
-      {
-        "date": "2025-12-03",
-        "surge_risk": "medium",
-        "expected_admissions": 185,
-        "main_drivers": ["festival", "pre-holiday healthcare"]
-      },
-      {
-        "date": "2025-12-04",
-        "surge_risk": "high",
-        "expected_admissions": 230,
-        "main_drivers": ["diwali_crowds", "pollution"]
-      }
-    ]
-  },
-  "staffing_plan": {
-    "per_day_plan": [
-      {
-        "date": "2025-12-04",
-        "risk_level": "high",
-        "recommended_additional_doctors": 8,
-        "recommended_additional_nurses": 15
-      }
-    ]
-  },
-  "supply_plan": {
-    "per_category_plan": [
-      {
-        "category": "oxygen",
-        "recommended_buffer_days": 3,
-        "recommended_order_quantity": 200,
-        "priority": "high"
-      }
-    ]
-  },
-  "patient_advisories": {
-    "patient_advisories": [
-      {
-        "channel": "sms",
-        "target_group": "elderly",
-        "message": "High pollution expected. Use masks outdoors and seek care early if needed.",
-        "priority": "high"
-      }
-    ]
-  }
-}
+```
+Executive Summary:
+Over the next 7 days we expect elevated emergency admissions driven by Diwali crowds and high pollution. Peak risk days are Dec 3–5; leadership should consider short-term staffing increases and prioritised ordering of oxygen and PPE.
+
+Surge Forecast:
+- 2025-12-03 — Risk: Medium — Expected admissions: ~185 — Drivers: Festival crowds, travel-related injuries
+- 2025-12-04 — Risk: High — Expected admissions: ~230 — Drivers: Diwali peak, PM2.5 spike
+- 2025-12-05 — Risk: Medium-High — Expected admissions: ~200 — Drivers: residual festival activity
+
+Assumptions:
+- Forecast uses last 14 days of admissions and pollution feed for Delhi; no major unreported incidents.
+
+Staffing Plan:
+- 2025-12-04 (High): +8 doctors, +15 nurses, +10 support staff. Prioritise internal reallocation and on-call activation before external hires.
+- Escalation: Postpone elective surgeries if occupancy > 90% and call partner hospitals.
+
+Supply Plan:
+- Oxygen: current stock ~500 units — Recommend order 200 units (buffer 3 days) — Priority: High
+- N95 masks: current stock ~1200 — Recommend moderate top-up (priority: Medium)
+- Ordering timeline: Place oxygen order within 24 hours; masks within 48 hours.
+
+Patient Advisories:
+- SMS (general): "High pollution and Diwali crowds expected. Please use masks outdoors and prefer teleconsultation when possible."
+- Website banner: short advisory with links to telemedicine scheduling.
+- Internal notes: Prepare triage protocols and a fast-track for respiratory cases.
+
+Action Items:
+- Place oxygen order (Procurement) — within 24h
+- Activate on-call roster for Dec 4 (HR) — immediate
+- Publish patient-facing advisories (Communications) — within 6h
+
 ```
 
 ## How It Works
