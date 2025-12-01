@@ -336,3 +336,25 @@ For issues or questions:
 
 **Last Updated**: December 2, 2025
 **Status**: Functional - Rate limits managed, core features working
+
+## Quick Test: Plain-Text Output
+
+You can quickly verify the plain-text report output with the included script.
+
+1. Activate your virtual environment:
+
+```bash
+source .venv/bin/activate
+```
+
+2. Run the test runner with a prompt (example):
+
+```bash
+python scripts/run_orchestrator_text.py "Plan for the next 7 days — expected Diwali crowds and high pollution levels in Delhi"
+```
+
+Notes:
+- The script instantiates the orchestrator and calls it with the provided prompt. Depending on your ADK version, the call may be synchronous or asynchronous; the script handles both.
+- Running the script will make calls to the Gemini API — you may encounter rate limits if your quota is exhausted.
+
+If you'd like an automated test harness or a CI-friendly mock (no external API calls), I can add a lightweight test that stubs the LLM client and validates text-only outputs.
